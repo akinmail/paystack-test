@@ -3,7 +3,7 @@ import { s3, prisma } from "../app";
 import csv from "csv-parser";
 import { Readable } from "stream";
 import fileProcessingQueue from "../queues/queue";
-import { BinData, BinDataFromCSV } from "../types/types";
+import { BinDataFromCSV } from "../types/types";
 
 const BATCH_SIZE = Number(process.env.BATCH_SIZE) || 1000;
 
@@ -144,7 +144,7 @@ async function processBatch(batch: BinDataFromCSV[]): Promise<void> {
           bank_city: bankCity,
       } = row;
 
-      return prisma.binData.upsert({
+      return prisma.bin.upsert({
           where: { bin },
           update: {
               scheme,
