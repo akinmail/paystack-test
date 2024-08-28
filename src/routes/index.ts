@@ -6,6 +6,14 @@ export const indexRouter = Router();
 
 indexRouter.get("/health", healthCheck);
 
-indexRouter.get("/start-upload", startUpload);
-indexRouter.get("/upload-part", uploadPart);
-indexRouter.get("/complete-upload", completeUpload);
+indexRouter.post("/start-upload", function(req, res){
+    startUpload
+  });
+indexRouter.post("/upload-part", function(req, res){
+    uploadPart
+  });
+indexRouter.post("/complete-upload", function(req, res){
+    completeUpload
+  });
+
+export default indexRouter;

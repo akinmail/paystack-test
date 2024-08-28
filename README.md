@@ -16,13 +16,11 @@ yarn
 yarn prisma:init
 ```
 
-3. setting .env and schema.prisma
+3. setting values for .env. Create a file named .env and copy values form .env.sample
 
 ```
 DATABASE_URL=****************
 ```
-
-Please refer to [prisma document](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases/connect-your-database-typescript-postgres) (Connect your database).
 
 4. prisma migrate
 
@@ -30,13 +28,32 @@ Please refer to [prisma document](https://www.prisma.io/docs/getting-started/set
 yarn prisma:migrate
 ```
 
-5. start server (development)
+5. start redis and mysql databases
+
+```
+docker run --name redis-server -d \
+  -p 6379:6379 \
+  -e REDIS_PASSWORD=mysecretpassword \
+  redis:latest redis-server --requirepass mysecretpassword
+
+docker run --name mysql-server -d \
+  -p 3306:3306 \
+  -e MYSQL_ROOT_PASSWORD=rootpassword \
+  -e MYSQL_USER=myuser \
+  -e MYSQL_PASSWORD=mypassword \
+  -e MYSQL_DATABASE=mydatabase \
+  mysql:latest
+
+
+```
+
+6. start server (development)
 
 ```
 yarn dev
 ```
 
-6. test
+7. test
 
 ```
 yarn test

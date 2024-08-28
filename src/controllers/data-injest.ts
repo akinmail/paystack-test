@@ -7,6 +7,14 @@ import { BinDataFromCSV } from "../types/types";
 
 const BATCH_SIZE = Number(process.env.BATCH_SIZE) || 1000;
 
+export function getAWSObject(fileName: string): Readable {
+  const params = {
+    Bucket: process.env.S3_BUCKET,
+    Key: fileName,
+  };
+  return s3.getObject(params).createReadStream();
+}
+
 
 export const startUpload = async (req: Request, res: Response): Promise<void> => {
     const { fileName, fileType } = req.body;
@@ -72,14 +80,10 @@ export const completeUpload = async (req: Request, res: Response): Promise<void>
 };
 
 export async function processData(fileName: string): Promise<void> {
-  const params = {
-      Bucket: process.env.S3_BUCKET,
-      Key: fileName,
-  };
 
   try {
       // Fetch file from S3
-      const s3Stream = s3.getObject(params).createReadStream();
+      const s3Stream = getAWSObject(fileName);
 
       await new Promise<void>((resolve, reject) => {
           const results: BinDataFromCSV[] = [];
@@ -130,7 +134,7 @@ export async function processData(fileName: string): Promise<void> {
   }
 }
 
-async function processBatch(batch: BinDataFromCSV[]): Promise<void> {
+export async function processBatch(batch: BinDataFromCSV[]): Promise<void> {
   const upserts = batch.map(row => {
       const {
           bin,
